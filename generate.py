@@ -245,6 +245,14 @@ def generate_image(alert: Union[dict, Box]) -> Optional[str]:
 
 
 def get_color_from_event(alert: Union[dict, Box]) -> int:
+    """Return the color for the associated event as defined in the configuration file.
+
+    Args:
+        alert (Union[dict, Box]): The NWS API alert.
+
+    Returns:
+        int: The color code associated with the event.
+    """
     alert = Box(alert)
     for wtype, colors in Config.ALERT_COLORS.items():
         if wtype in alert.properties.event:
