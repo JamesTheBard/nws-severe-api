@@ -26,3 +26,11 @@ class Config:
         {"event": ["Tornado", "Thunderstorm", "Flash Flood"]}
     ]
     
+    ALERT_COLORS = {
+        "Tornado": [0xff00ff, 0xff00ff],
+        "Thunderstorm": [0xffa500, 0xff0000],
+        "Flash Flood": [0x03c03c, 0x8fd400],
+    }
+    ALERT_COLOR_EXPIRED = 0x4169e1
+    ALERT_COLOR_DEFAULT = 0xffffff
+    

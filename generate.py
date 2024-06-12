@@ -244,6 +244,18 @@ def generate_image(alert: Union[dict, Box]) -> Optional[str]:
     return file_name
 
 
+def get_color_from_event(alert: Union[dict, Box]) -> int:
+    alert = Box(alert)
+    for wtype, colors in Config.ALERT_COLORS.items():
+        if wtype in alert.properties.event:
+            return colors[0] if "Watch" in alert.properties.event else colors[1]
+
+    if alert.properties.instruction == None:
+        return Config.ALERT_COLOR_EXPIRED
+    
+    return Config.ALERT_COLOR_DEFAULT
+
+
 def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str) -> int:
     """Notify a Discord channel via webhook.
 
@@ -261,12 +273,18 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
     if alert.properties.messageType.lower() == "update":
         title += " (UPDATE)"
 
+    color = get_color_from_event(alert)
     if alert.properties.instruction == None:
-        color = 0x009933
-    else:
-        color = 0xE40330
+        color = 0x1e90ff
 
-    description = f"```\n{alert.properties.description[:1010]}\n```"
+    description = alert.properties.description
+    if len(description) > 1010:
+        description = description[:1007]
+        if description[-1] in ' \\':
+            description = description[:-1]
+        description = description + "..."
+    
+    description = f"```\n{description}\n```"
 
     content = {
         'embeds': [
