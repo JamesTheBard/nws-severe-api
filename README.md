@@ -8,7 +8,13 @@
 
 ## Instructions
 
-1. Start the database.
+1. Download all of the requisite data.
+
+   ```
+   sh populate_data.sh
+   ```
+
+2. Start the database.
 
    ```
    cd docker
@@ -16,7 +22,7 @@
    cd ..
    ```
 
-2. Start the webserver.  For `webfs`, just run the `run_server_webfs.sh` script.
+3. Start the webserver.  For `webfs`, just run the `run_server_webfs.sh` script.
 
    ```
    sh run_server_webfs.sh
@@ -28,13 +34,13 @@
    sh run_server_python.sh
    ```
 
-3. Install all dependencies.
+4. Install all dependencies.
 
    ```
    poetry install
    ```
 
-3. Start the updater service.
+5. Start the updater service.
 
    ```
    poetry run python update.py
