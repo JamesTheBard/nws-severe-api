@@ -93,7 +93,6 @@ def get_alerts(initial: bool = False) -> int:
                     log.warn(f" - Area: {f.properties.areaDesc}")
                     continue
                 log.info(f'Event: "{f.properties.event}"')
-                log.info(f" - ID: {f.id}")
                 log.info(f' - Area: {f.properties.areaDesc}')
                 log.info(f' - Generating image: "{image}"')
                 notify_discord_webhook(f, image=image, webhook_url=Config.DISCORD_WEBHOOK)

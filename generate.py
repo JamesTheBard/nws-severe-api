@@ -1,5 +1,6 @@
 from uuid import uuid4
 import time
+import json
 
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -265,6 +266,8 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
     else:
         color = 0xE40330
 
+    description = f"```\n{alert.properties.description[:1010]}\n```"
+
     content = {
         'embeds': [
             {
@@ -287,7 +290,7 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
                     },
                     {
                         "name": "More Information",
-                        "value": f"```\n{alert.properties.description}\n```",
+                        "value": description,
                     }
                 ]
             }
@@ -297,11 +300,16 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
     for i in range(3):
         r = requests.post(webhook_url, json=content)
         if r.status_code != 204:
-            logging.info("Could not trigger webhook, status code '{r.status_code}', retrying.")
+            logging.info(f"Could not trigger webhook, status code '{r.status_code}', retrying.")
             time.sleep(2)
         else:
             logging.info(f"Webhook triggered, return code: {r.status_code}")
             return r.status_code
 
-    logging.warn("Failed to send Discord webhook!")
+    logging.warn(f"Failed to send Discord webhook! Response: {r.content.decode()}")
+    error_file = f"error_{str(uuid4())}.txt"
+    with open(error_file, "w") as f:
+        f.write(json.dumps(content))
+        
+    logging.warn(f'Embed content saved as "{error_file}"')
     return r.status_code
