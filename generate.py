@@ -304,3 +304,4 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
             return r.status_code
 
     logging.warn("Failed to send Discord webhook!")
+    return r.status_code
