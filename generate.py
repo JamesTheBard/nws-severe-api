@@ -282,8 +282,6 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
         title += " (UPDATE)"
 
     color = get_color_from_event(alert)
-    if alert.properties.instruction == None:
-        color = 0x1e90ff
 
     description = alert.properties.description
     if len(description) > 1010:
