@@ -254,6 +254,10 @@ def get_color_from_event(alert: Union[dict, Box]) -> int:
         int: The color code associated with the event.
     """
     alert = Box(alert)
+
+    if "allowed to expire" in alert.properties.description:
+        return Config.ALERT_COLOR_EXPIRED
+    
     for wtype, colors in Config.ALERT_COLORS.items():
         if wtype in alert.properties.event:
             return colors[0] if "Watch" in alert.properties.event else colors[1]
