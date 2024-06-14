@@ -33,7 +33,9 @@ class Config:
     
     # Alert colors
     # Format: {"Event Regex": [0xWATCH_COLOR, 0xWARNING_COLOR]}
-    
+    # Should add a color for a given event from the FILTER_RULES otherwise it will default to
+    # the ALERT_COLOR_DEFAULT
+
     ALERT_COLORS = {                          # Watch        Warning
         "Tornado":      [0xc60101, 0xff00ff], # Red          Pink
         "Thunderstorm": [0xe8e800, 0xe89804], # Yellow       Orange
@@ -41,7 +43,7 @@ class Config:
     }
 
     # Alert color for expired alerts
-    ALERT_COLOR_EXPIRED = 0x4169e1
+    ALERT_COLOR_EXPIRED = 0x505050
 
     # Alert colors for undefined/unmatched alerts
     ALERT_COLOR_DEFAULT = 0xffffff
