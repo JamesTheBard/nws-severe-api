@@ -39,7 +39,8 @@ class Config:
     ALERT_COLORS = {                          # Watch        Warning
         "Tornado":      [0xc60101, 0xff00ff], # Red          Pink
         "Thunderstorm": [0xe8e800, 0xe89804], # Yellow       Orange
-        "Flash Flood":  [0x03c03c, 0x028228], # Light Green  Green    
+        "Flash Flood":  [0x03c03c, 0x028228], # Light Green  Green   
+        "Winter Storm": [0x435882, 0x2360db], # Desat Blue   Bright Blue
     }
 
     # Alert color for expired alerts
@@ -47,4 +48,3 @@ class Config:
 
     # Alert colors for undefined/unmatched alerts
     ALERT_COLOR_DEFAULT = 0xffffff # White
-    
