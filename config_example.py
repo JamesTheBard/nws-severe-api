@@ -28,7 +28,7 @@ class Config:
     # Alert filter
     # [{"properties_attribute": ["regex1", "regex2", ...]}]
     FILTER_RULES = [
-        {"event": ["Tornado", "Thunderstorm", "Flash Flood"]}
+        {"event": ["Tornado", "Thunderstorm", "Flash Flood", "Winter Storm"]}
     ]
     
     # Alert colors
