@@ -43,8 +43,8 @@ class Config:
     }
 
     # Alert color for expired alerts
-    ALERT_COLOR_EXPIRED = 0x505050
+    ALERT_COLOR_EXPIRED = 0x505050 # Gray
 
     # Alert colors for undefined/unmatched alerts
-    ALERT_COLOR_DEFAULT = 0xffffff
+    ALERT_COLOR_DEFAULT = 0xffffff # White
     
