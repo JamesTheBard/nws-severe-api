@@ -70,10 +70,16 @@ def get_alerts(initial: bool = False) -> int:
                         headers=Config.NWS_API_HEADERS,
                         params=Config.NWS_API_PARAMS)
     except ConnectionError as e:
-        log.warn(f"Unable to connect to the National Weather Service API: {e.strerror}")
+        log.warning(f"Unable to connect to the National Weather Service API: {e.strerror}")
         return 0
-
-    data = Box(r.json())
+    
+    try:
+        data = Box(r.json())
+    except requests.exceptions.JSONDecodeError as e:
+        log.warning("Could not decode NWS API response.")
+        log.warning(f"Error: {e.strerror}")
+        return 0
+    
     log.debug(f"Pulled {len(data.features)} alerts from the NWS.")
     
     rules = [
@@ -88,9 +94,9 @@ def get_alerts(initial: bool = False) -> int:
             if filter_alert(Config.FILTER_RULES, f):
                 image = generate_image(f)
                 if image is None:
-                    log.warn(f"Unable to generate image for event: {f.properties.event}")
-                    log.warn(f" - ID: {f.id}")
-                    log.warn(f" - Area: {f.properties.areaDesc}")
+                    log.warning(f"Unable to generate image for event: {f.properties.event}")
+                    log.warning(f" - ID: {f.id}")
+                    log.warning(f" - Area: {f.properties.areaDesc}")
                     continue
                 log.info(f'Event: "{f.properties.event}"')
                 log.info(f' - Area: {f.properties.areaDesc}')

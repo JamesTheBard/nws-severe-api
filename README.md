@@ -5,6 +5,7 @@
 - Docker and Docker Compose installed
 - `webfsd` installed (if serving images with `webfs`)
 - Poetry installed (for dependency management)
+- A public URL to serve the images from
 
 ## Instructions
 

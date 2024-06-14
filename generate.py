@@ -255,16 +255,13 @@ def get_color_from_event(alert: Union[dict, Box]) -> int:
     """
     alert = Box(alert)
 
-    if "allowed to expire" in alert.properties.description:
+    if "expire" in alert.properties.description.lower() and alert.properties.instruction == None:
         return Config.ALERT_COLOR_EXPIRED
     
     for wtype, colors in Config.ALERT_COLORS.items():
         if wtype in alert.properties.event:
             return colors[0] if "Watch" in alert.properties.event else colors[1]
 
-    if alert.properties.instruction == None:
-        return Config.ALERT_COLOR_EXPIRED
-    
     return Config.ALERT_COLOR_DEFAULT
 
 
@@ -334,10 +331,10 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
             logging.info(f"Webhook triggered, return code: {r.status_code}")
             return r.status_code
 
-    logging.warn(f"Failed to send Discord webhook! Response: {r.content.decode()}")
+    logging.warning(f"Failed to send Discord webhook! Response: {r.content.decode()}")
     error_file = f"error_{str(uuid4())}.txt"
     with open(error_file, "w") as f:
         f.write(json.dumps(content))
         
-    logging.warn(f'Embed content saved as "{error_file}"')
+    logging.warning(f'Embed content saved as "{error_file}"')
     return r.status_code
