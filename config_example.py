@@ -33,10 +33,11 @@ class Config:
     
     # Alert colors
     # Format: {"Event Regex": [0xWATCH_COLOR, 0xWARNING_COLOR]}
-    ALERT_COLORS = {
-        "Tornado":      [0xff00ff, 0xff00ff],
-        "Thunderstorm": [0xffa500, 0xff0000],
-        "Flash Flood":  [0x03c03c, 0x8fd400],
+    
+    ALERT_COLORS = {                          # Watch        Warning
+        "Tornado":      [0xc60101, 0xff00ff], # Red          Pink
+        "Thunderstorm": [0xe8e800, 0xe89804], # Yellow       Orange
+        "Flash Flood":  [0x03c03c, 0x028228], # Light Green  Green    
     }
 
     # Alert color for expired alerts
