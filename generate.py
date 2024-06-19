@@ -1,19 +1,20 @@
-from uuid import uuid4
-import time
 import json
+import logging
+import time
+from typing import Optional, Union
+from uuid import uuid4
 
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import cartopy.io.shapereader as shapereader
 import contextily as cx
-import logging
 import geopandas as gpd
 import matplotlib
 import matplotlib.pyplot as plt
 import requests
 from box import Box
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from shapely import Polygon
-from typing import Optional, Union
 
 from config import Config
 
@@ -29,6 +30,11 @@ reader = shapereader.Reader("data/countyl010g.shp")
 counties = list(reader.geometries())
 COUNTIES = cfeature.ShapelyFeature(counties, ccrs.PlateCarree())
 
+# Load the embeds templates
+env = Environment(
+    loader=FileSystemLoader("templates"),
+    autoescape=False,
+)
 
 class Bounds:
     """A boundary object that contains the outer-most latitude/longitude measurements.
@@ -293,34 +299,18 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
     
     description = f"```\n{description}\n```"
 
-    content = {
-        'embeds': [
-            {
-                "title": title,
-                "description": f"## {alert.properties.headline}",
-                "url": alert.id,
-                "color": color,
-                "timestamp": alert.properties.effective.isoformat(),
-                "image": {
-                    "url": Config.IMAGE_SERVER_URL + '/' + image,
-                },
-                "author": {
-                    "name": "National Weather Service",
-                    "url": "https://www.spc.noaa.gov"
-                },
-                "fields": [
-                    {
-                        "name": "Affected Counties",
-                        "value": alert.properties.areaDesc,
-                    },
-                    {
-                        "name": "More Information",
-                        "value": description,
-                    }
-                ]
-            }
-        ]
-    }
+    template = env.get_template("embeds_01.j2")
+    content = template.render(
+        title=title,
+        headline=alert.properties.headline,
+        url=alert.id,
+        color=color,
+        timestamp=alert.properties.effective.isoformat(),
+        map_url=Config.IMAGE_SERVER_URL + '/' + image,
+        counties=alert.properties.areaDesc,
+        description=description,
+    )
+    content=json.loads(content, strict=False)
 
     for i in range(3):
         r = requests.post(webhook_url, json=content)

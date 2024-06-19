@@ -145,6 +145,7 @@ def add_record(feature: Box, generate_image: bool = False) -> bool:
         return False
     return True
 
+
 def process_description(desc: str) -> str:
     """Remove all unneeded newlines from the string and replace with spaces.
 
@@ -154,8 +155,11 @@ def process_description(desc: str) -> str:
     Returns:
         str: The description with all the single newlines being replaced with spaces.
     """
-    return "\n\n".join([i.replace("\n", ' ') for i in desc.split("\n\n")])
-        
+    try:
+        return "\n\n".join([i.replace("\n", ' ') for i in desc.split("\n\n")])
+    except AttributeError:
+        log.debug("Alert contained no description!")
+        return str()
 
 def clean_records() -> int:
     """Remove all expired alerts from the database.
@@ -201,6 +205,12 @@ if __name__ == "__main__":
     # Initial DB load
     coll = db["test"]
     coll.create_index("id", unique=True)
+
+    log.info(f"NWS API Updater")
+    log.info(f' - Version........: "{Config.VERSION}"')
+    log.info(f' - NWS API URL....: "{Config.NWS_API_URL}"')
+    log.info(f' - Image URL......: "{Config.IMAGE_SERVER_URL}"')
+    log.info(f' - Image save path: "{Path(Config.IMAGE_SAVE_PATH).resolve()}"')
 
     log.info("Populating database.")
     get_alerts(initial=True)
