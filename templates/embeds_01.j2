@@ -1,0 +1,28 @@
+{
+  "embeds": [
+    {
+      "title": "{{ title }}",
+      "description": "## {{ headline }}",
+      "url": "{{ url }}",
+      "color": "{{ color }}",
+      "timestamp": "{{ timestamp }}",
+      "image": {
+        "url": "{{ map_url }}"
+      },
+      "author": {
+        "name": "National Weather Service",
+        "url": "https://www.spc.noaa.gov"
+      },
+      "fields": [
+        {
+          "name": "Affected Counties",
+          "value": "{{ counties }}"
+        },
+        {
+          "name": "More Information",
+          "value": "{{ description }}"
+        }
+      ]
+    }
+  ]
+}
