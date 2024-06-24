@@ -82,12 +82,6 @@ def get_alerts(initial: bool = False) -> int:
     
     log.debug(f"Pulled {len(data.features)} alerts from the NWS.")
     
-    rules = [
-        r'Thunderstorm',
-        r'Tornado',
-        r'Flash Flood',
-    ]
-    
     new_messages = 0
     for f in data.features:
         if add_record(f) and not initial:
@@ -100,6 +94,8 @@ def get_alerts(initial: bool = False) -> int:
                     continue
                 log.info(f'Event: "{f.properties.event}"')
                 log.info(f' - Area: {f.properties.areaDesc}')
+                if td := f.properties.parameters.get("tornadoDetection", False):
+                    log.info(f' - Tornado: {', '.join(td).title()}')
                 log.info(f' - Generating image: "{image}"')
                 notify_discord_webhook(f, image=image, webhook_url=Config.DISCORD_WEBHOOK)
             else:
