@@ -18,6 +18,12 @@
           "name": "Affected Counties",
           "value": "{{ counties }}"
         },
+        {% if tornado_possible %}
+        {
+          "name": "Tornado Detection",
+          "value": "{{ tornado_possible | join | title }}"
+        },
+        {% endif %}
         {
           "name": "More Information",
           "value": "{{ description }}"

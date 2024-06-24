@@ -309,6 +309,7 @@ def notify_discord_webhook(alert: Union[dict, Box], image: str, webhook_url: str
         map_url=Config.IMAGE_SERVER_URL + '/' + image,
         counties=alert.properties.areaDesc,
         description=description,
+        tornado_possible=alert.properties.parameters.get("tornadoDetection", False),
     )
     content=json.loads(content, strict=False)
 
